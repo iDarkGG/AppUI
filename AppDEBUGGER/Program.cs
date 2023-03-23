@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Xml;
+﻿using System.Xml;
 using AppDependencies;
 public class uwu
 {
@@ -68,7 +67,7 @@ public class uwu
             {
                 if (node.Attributes[attributeName] != null && node.Attributes[attributeName].Value == attributeValue)
                 {
-                    Console.WriteLine("Element found!");
+                    Console.WriteLine("Elemento Encontrado");
                     Console.WriteLine(node.OuterXml);
                     return;
                 }
@@ -80,7 +79,7 @@ public class uwu
                     {
                         if (childNode.Attributes != null && childNode.Attributes[attributeName] != null && childNode.Attributes[attributeName].Value == attributeValue)
                         {
-                            Console.WriteLine("Element found!");
+                            Console.WriteLine("Elemento Encontrado");
                             Console.WriteLine(childNode.OuterXml);
                             return;
                         }
@@ -93,7 +92,7 @@ public class uwu
                 }
             }
 
-            Console.WriteLine("Element not found.");
+            Console.WriteLine("Elemento no Encontrado");
         }
 
         void Search2(XmlNode node, string attributeName, string attributeValue)
@@ -103,7 +102,7 @@ public class uwu
             {
                 if (childNode.Attributes != null && childNode.Attributes[attributeName] != null && childNode.Attributes[attributeName].Value == attributeValue)
                 {
-                    Console.WriteLine("Element found!");
+                    Console.WriteLine("Elemento Encontrado");
                     Console.WriteLine(childNode.OuterXml);
                     return;
                 }
