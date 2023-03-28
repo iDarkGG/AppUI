@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
+using System.Text.Json;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AppDependencies
 {
@@ -14,109 +17,35 @@ namespace AppDependencies
 
         public void CrearBasedeDatos(string Name)
         {
-            XmlDocument DataBase = new XmlDocument();
-            XmlNode root = DataBase.CreateElement("DATOS");
-            DataBase.AppendChild(root);
-
-
-            XmlElement UserName = DataBase.CreateElement("Default_UserName");
-            UserName.SetAttribute("value", "Admin");
-
-            XmlElement Password = DataBase.CreateElement("Default_Password");
-            Password.InnerText = "Admin123";
-
-            XmlElement Email = DataBase.CreateElement("Default_Email");
-            Email.InnerText = "Admin@gmail.com";
-
-            UserName.AppendChild(Password);
-            UserName.AppendChild(Email);
-
-            root.AppendChild(UserName);
-
-            DataBase.Save("Prueba2.xml");
-            DataBase.Save(Name + ".xml");
-
-        }
-
-        public void Search(string elementName, string attributeName, string attributeValue)
-        {
-            XmlDocument DataBase = new XmlDocument();
-            DataBase.Load("Prueba2.xml");
-
-            XmlNodeList nodes = DataBase.GetElementsByTagName(elementName);
-            foreach (XmlNode node in nodes)
+            var DefaultObj = new UserDataScheme()
             {
-                if (node.Attributes[attributeName] != null && node.Attributes[attributeName].Value == attributeValue)
-                {
-                    Console.WriteLine("Elemento Encontrado");
-                    Console.WriteLine(node.OuterXml);
-                    return;
-                }
-                else
-                {
-                    XmlNode childNode = node.FirstChild;
+                Username = "Admin123",
+                Email = "Admin@domain.com",
+                Password = "Admin123",
+                UserID = 0
+            };
 
-                    while (childNode != null)
-                    {
-                        if (childNode.Attributes != null && childNode.Attributes[attributeName] != null && childNode.Attributes[attributeName].Value == attributeValue)
-                        {
-                            Console.WriteLine("Elemento Encontrado");
-                            Console.WriteLine(childNode.OuterXml);
-                            return;
-                        }
-                        else
-                        {
-                            Search(childNode, attributeName, attributeValue);
-                        }
-                        childNode = childNode.NextSibling;
-                    }
-                }
-            }
+            var Options = new JsonSerializerOptions {  WriteIndented= true };
 
-            Console.WriteLine("Elemento no Encontrado");
-        }
+            string DefaultValues = JsonSerializer.Serialize( DefaultObj,Options
+            );
 
-        private void Search(XmlNode nodo, string attributeName, string attributeValue)
-        {
-            XmlNode childNode = nodo.FirstChild;
-            while (childNode != null)
+            using (StreamWriter sw = File.CreateText(Name + ".json"))
             {
-                if (childNode.Attributes != null && childNode.Attributes[attributeName] != null && childNode.Attributes[attributeName].Value == attributeValue)
-                {
-                    Console.WriteLine("Elemento Encontrado");
-                    Console.WriteLine(childNode.OuterXml);
-                    return;
-                }
-                else
-                {
-                    Search(childNode, attributeName, attributeValue);
-                }
-                childNode = childNode.NextSibling;
+                sw.WriteLine(DefaultValues);
             }
         }
 
-
-        public void AddData(string userName, string password, string email)
+        public void Search(string Name, out string Username, out string Email, out string Passsword, out int UserID)
         {
-            XmlDocument DataBase = new XmlDocument();
-            DataBase.Load("Prueba2.xml");
-
-
-            XmlElement UserName = DataBase.CreateElement("UserName");
-            UserName.SetAttribute("value", userName);
-
-            XmlElement Password = DataBase.CreateElement("Password");
-            Password.InnerText = password;
-
-            XmlElement Email = DataBase.CreateElement("Email");
-            Email.InnerText = email;
-
-            UserName.AppendChild(Password);
-            UserName.AppendChild(Email);
-
-            XmlNode nodoadd = DataBase.SelectSingleNode("/DATOS");
-            nodoadd.AppendChild(UserName);
+            string jsonString = File.ReadAllText(Name + ".json");
+            UserDataScheme Values = JsonSerializer.Deserialize<UserDataScheme>(jsonString);
+            Username = Values.Username;
+            Email = Values.Email;
+            Passsword = Values.Password;
+            UserID = Values.UserID;
         }
 
+        
     }
 }
