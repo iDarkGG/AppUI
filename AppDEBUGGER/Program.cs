@@ -6,14 +6,14 @@ public class uwu
     {
 
         FileParser fp = new FileParser();
-        fp.CrearBasedeDatos("UwU");
+        fp.CrearBasedeDatos("UwU","INSD12","Harry", "Editado",21);
 
         string user, password, email;
         int userid;
 
 
-        fp.Search("UwU", out user, out email, out password, out userid);
+        fp.Search("UwU");
 
-        Console.WriteLine(password);
+       
     }
 }

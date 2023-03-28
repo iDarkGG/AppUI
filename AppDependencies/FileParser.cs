@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Text.Json;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Security.Cryptography.X509Certificates;
+using System.Text.Json.Nodes;
+using System.Text.Json;
 
 namespace AppDependencies
 {
@@ -15,37 +14,55 @@ namespace AppDependencies
     {
 
 
-        public void CrearBasedeDatos(string Name)
+        public void CrearBasedeDatos(string Name, string ISBN, string Autor, string Editor, int Paginas)
         {
-            var DefaultObj = new UserDataScheme()
+           var NodoRaiz = new JsonObject();
+
+           var LibrosNode = new JsonObject();
+
+           var LibroAñadir = new JsonObject();
+            LibroAñadir.Add("ISBN", ISBN);
+            LibroAñadir.Add("Autor", Autor);
+            LibroAñadir.Add("Editor", Editor);
+            LibroAñadir.Add("Paginas", Paginas.ToString());
+
+            LibrosNode.Add("LibroDePrueba", LibroAñadir);
+
+            NodoRaiz.Add("Libros", LibrosNode);
+            
+            var Options = new JsonSerializerOptions() { WriteIndented= true };
+            string Libros = JsonSerializer.Serialize(NodoRaiz, Options);
+
+           using (StreamWriter sw = File.CreateText(Name + ".json"))
             {
-                Username = "Admin123",
-                Email = "Admin@domain.com",
-                Password = "Admin123",
-                UserID = 0
-            };
-
-            var Options = new JsonSerializerOptions {  WriteIndented= true };
-
-            string DefaultValues = JsonSerializer.Serialize( DefaultObj,Options
-            );
-
-            using (StreamWriter sw = File.CreateText(Name + ".json"))
-            {
-                sw.WriteLine(DefaultValues);
+                sw.WriteLine(Libros);
             }
+
         }
 
-        public void Search(string Name, out string Username, out string Email, out string Passsword, out int UserID)
+        public void Search(string Name)
         {
-            string jsonString = File.ReadAllText(Name + ".json");
-            UserDataScheme Values = JsonSerializer.Deserialize<UserDataScheme>(jsonString);
-            Username = Values.Username;
-            Email = Values.Email;
-            Passsword = Values.Password;
-            UserID = Values.UserID;
-        }
+            var jsonString = File.ReadAllText(Name + ".json");
 
+            JsonNode NodoRaiz = JsonNode.Parse(jsonString);
+
+
+            JsonNode LibroNodo = NodoRaiz["Libros"]["LibroDePrueba"]["ISBN"] = "awadeowo";
+
+            var jsonOptions = new JsonSerializerOptions() { WriteIndented = true };
+
+            
+
+            using (FileStream fs = new FileStream(Name + ".json", FileMode.Append, FileAccess.Write))
+            using (StreamWriter sw =new StreamWriter(fs))
+            {
+                sw.WriteLine(NodoRaiz.ToJsonString(jsonOptions));
+            }
+            Console.WriteLine(LibroNodo.ToString());
+            
+           
+        }
+        
         
     }
 }
