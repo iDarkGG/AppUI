@@ -13,27 +13,42 @@ namespace AppDependencies
     public class FileParser
     {
 
+        private string jsonLoader;
+
+
+
+      
+
+
+        public async Task DocumentHandlerTask() 
+        {
+            if(File.Exists("UwU.json"))
+                jsonLoader = File.ReadAllText("UwU.json");
+            else
+                Console.WriteLine("No se ha encontrado el archivo con ese nombre, favor, reintentar con otro nombre o crear un archivo");
+
+        }
+
 
         public void CrearBasedeDatos(string Name, string ISBN, string Autor, string Editor, int Paginas)
         {
-           var NodoRaiz = new JsonObject();
+            var NodoRaiz = new JsonObject();
 
-           var LibrosNode = new JsonObject();
+            var LibrosNode = new JsonObject();
 
-           var LibroAñadir = new JsonObject();
+            var LibroAñadir = new JsonObject();
             LibroAñadir.Add("ISBN", ISBN);
             LibroAñadir.Add("Autor", Autor);
             LibroAñadir.Add("Editor", Editor);
             LibroAñadir.Add("Paginas", Paginas.ToString());
-
             LibrosNode.Add("LibroDePrueba", LibroAñadir);
 
             NodoRaiz.Add("Libros", LibrosNode);
-            
-            var Options = new JsonSerializerOptions() { WriteIndented= true };
+
+            var Options = new JsonSerializerOptions() { WriteIndented = true };
             string Libros = JsonSerializer.Serialize(NodoRaiz, Options);
 
-           using (StreamWriter sw = File.CreateText(Name + ".json"))
+            using (StreamWriter sw = File.CreateText(Name + ".json"))
             {
                 sw.WriteLine(Libros);
             }
@@ -51,18 +66,16 @@ namespace AppDependencies
 
             var jsonOptions = new JsonSerializerOptions() { WriteIndented = true };
 
-            
-
-            using (FileStream fs = new FileStream(Name + ".json", FileMode.Append, FileAccess.Write))
-            using (StreamWriter sw =new StreamWriter(fs))
+            using (StreamWriter sw = File.CreateText(Name + ".json"))
             {
                 sw.WriteLine(NodoRaiz.ToJsonString(jsonOptions));
             }
-            Console.WriteLine(LibroNodo.ToString());
             
-           
+            Console.WriteLine(LibroNodo.ToString());
+
+
         }
-        
-        
+
+
     }
 }

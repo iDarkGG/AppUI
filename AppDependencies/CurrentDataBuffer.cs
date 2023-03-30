@@ -11,15 +11,6 @@ namespace AppDependencies
     {
         static private List<UserDataScheme> dataBuffer = new List<UserDataScheme>();
 
-        public UserDataScheme? dataReader()
-        {
-            foreach (UserDataScheme item in dataBuffer)
-            {
-                return item;
-            }
-            return null;
-        }
-
         protected static void BufferStarter()
         {
             UserDataScheme start = new UserDataScheme

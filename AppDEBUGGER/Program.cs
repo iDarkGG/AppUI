@@ -2,18 +2,22 @@
 using AppDependencies;
 public class uwu
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
+        
 
         FileParser fp = new FileParser();
-        fp.CrearBasedeDatos("UwU","INSD12","Harry", "Editado",21);
+
+        await fp.DocumentHandlerTask();
+
+        fp.CrearBasedeDatos("UwU", "INSD12", "Harry", "Editado", 21);
 
         string user, password, email;
         int userid;
+        
 
 
-        fp.Search("UwU");
+        fp.Search("uwu");
 
-       
     }
 }
