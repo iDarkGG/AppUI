@@ -13,69 +13,81 @@ namespace AppDependencies
     public class FileParser
     {
 
-        private string jsonLoader;
+        public string Global_Name { get; set; }
 
 
 
-      
-
-
-        public async Task DocumentHandlerTask() 
+        public void CrearAñadirDatos(string Name, string ISBN, string Autor, string Editor, int Paginas)
         {
-            if(File.Exists("UwU.json"))
-                jsonLoader = File.ReadAllText("UwU.json");
+
+            string Structure = Name + "," + ISBN + "," + Autor + "," + Editor + "," + Paginas.ToString();
+
+            if (File.Exists(Global_Name))
+            {
+                using (FileStream fs = new FileStream(Global_Name + ".csv", FileMode.Append, FileAccess.Write))
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    sw.WriteLine(Structure);
+                }
+            }
             else
-                Console.WriteLine("No se ha encontrado el archivo con ese nombre, favor, reintentar con otro nombre o crear un archivo");
+            {
+                using (StreamWriter sw = File.CreateText(Global_Name + ".csv"))
+                {
 
+                }
+            }
+
+           
         }
 
 
-        public void CrearBasedeDatos(string Name, string ISBN, string Autor, string Editor, int Paginas)
+        public void Search(string Busqueda)
         {
-            var NodoRaiz = new JsonObject();
+            string? Handler = null;
+            List<string[]> SplitHandler = new List<string[]>();
 
-            var LibrosNode = new JsonObject();
-
-            var LibroAñadir = new JsonObject();
-            LibroAñadir.Add("ISBN", ISBN);
-            LibroAñadir.Add("Autor", Autor);
-            LibroAñadir.Add("Editor", Editor);
-            LibroAñadir.Add("Paginas", Paginas.ToString());
-            LibrosNode.Add("LibroDePrueba", LibroAñadir);
-
-            NodoRaiz.Add("Libros", LibrosNode);
-
-            var Options = new JsonSerializerOptions() { WriteIndented = true };
-            string Libros = JsonSerializer.Serialize(NodoRaiz, Options);
-
-            using (StreamWriter sw = File.CreateText(Name + ".json"))
+            using (StreamReader sr = File.OpenText(Global_Name + ".csv"))
             {
-                sw.WriteLine(Libros);
+                while (!sr.EndOfStream)
+                {
+                    Handler = sr.ReadLine();
+
+                    SplitHandler.Add(Handler.Split(','));
+
+                    /*Diferenciacion de posiciones.
+                     0 = Nombre del libro
+                     1 = ISBN
+                     2 = Autor
+                     3 = Editor
+                     4 = Numero de Paginas*/
+                }
+
+                foreach (var item in SplitHandler)
+                {
+                    if (item[0].Trim() == Busqueda | item[1].Trim() == Busqueda | item[2].Trim() == Busqueda | item[3].Trim() == Busqueda | item[4].Trim().ToString() == Busqueda)
+                    {
+                        Console.WriteLine(Printer(item[0].Trim(), item[1].Trim(), item[2].Trim(), item[3].Trim(), Convert.ToInt32(item[4].Trim()))); 
+                    }
+                    else
+                    {
+
+                    }
+
+                }
+
             }
 
         }
 
-        public void Search(string Name)
+        public string Printer(string Name, string ISBN, string Autor, string Editor, int Paginas)
         {
-            var jsonString = File.ReadAllText(Name + ".json");
-
-            JsonNode NodoRaiz = JsonNode.Parse(jsonString);
-
-
-            JsonNode LibroNodo = NodoRaiz["Libros"]["LibroDePrueba"]["ISBN"] = "awadeowo";
-
-            var jsonOptions = new JsonSerializerOptions() { WriteIndented = true };
-
-            using (StreamWriter sw = File.CreateText(Name + ".json"))
-            {
-                sw.WriteLine(NodoRaiz.ToJsonString(jsonOptions));
-            }
-            
-            Console.WriteLine(LibroNodo.ToString());
-
-
+            return "Nombre: " + Name +
+                   "\nISBN: " + ISBN +
+                   "\nAutor: " + Autor +
+                   "\nEditor: " + Editor +
+                   "\nPaginas: " + Paginas;
         }
-
 
     }
 }
