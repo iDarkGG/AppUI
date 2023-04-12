@@ -14,8 +14,9 @@ namespace AppDependencies
     {
 
         public string Global_Name { get; set; }
+        private string StringProcesing;
 
-
+        Misc Misc = new Misc();
 
         public void CrearAñadirDatos(string Name, string ISBN, string Autor, string Editor, int Paginas)
         {
@@ -28,13 +29,14 @@ namespace AppDependencies
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
                     sw.WriteLine(Structure);
+                    
                 }
             }
             else
             {
                 using (StreamWriter sw = File.CreateText(Global_Name + ".csv"))
                 {
-
+                    sw.WriteLine(Structure);
                 }
             }
 
@@ -42,7 +44,7 @@ namespace AppDependencies
         }
 
 
-        public void Search(string Busqueda)
+        public bool Search(string Busqueda)
         {
             string? Handler = null;
             List<string[]> SplitHandler = new List<string[]>();
@@ -67,27 +69,53 @@ namespace AppDependencies
                 {
                     if (item[0].Trim() == Busqueda | item[1].Trim() == Busqueda | item[2].Trim() == Busqueda | item[3].Trim() == Busqueda | item[4].Trim().ToString() == Busqueda)
                     {
-                        Console.WriteLine(Printer(item[0].Trim(), item[1].Trim(), item[2].Trim(), item[3].Trim(), Convert.ToInt32(item[4].Trim()))); 
+                        StringProcesing = item[0].Trim() + "," + item[1].Trim() + "," + item[2].Trim() + "," + item[3].Trim() + "," + Convert.ToInt32(item[4].Trim();
+                        Console.WriteLine(Misc.Printer(item[0].Trim(), item[1].Trim(), item[2].Trim(), item[3].Trim(), Convert.ToInt32(item[4].Trim())));
+                        return true;
                     }
                     else
                     {
-
+                        Console.WriteLine("No se encontró el libro que busca. Por favor intente con otro o verifique lo que escribió.");
                     }
 
                 }
 
             }
+            return false;
 
         }
 
-        public string Printer(string Name, string ISBN, string Autor, string Editor, int Paginas)
+        public void ItemEditor(string Busqueda, string NewName, string NewISBN, string NewAutor, string NewEditor, int NewPages)
         {
-            return "Nombre: " + Name +
-                   "\nISBN: " + ISBN +
-                   "\nAutor: " + Autor +
-                   "\nEditor: " + Editor +
-                   "\nPaginas: " + Paginas;
+            string Content;
+            if (Search(Busqueda))
+            {
+                using (StreamReader sw = File.OpenText(Global_Name+ ".csv"))
+                {
+                    Content = sw.ReadToEnd();
+
+                    for(int i = 0; i < 5; i++)
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                
+
+                                
+                                break;
+                        }  
+                    }
+
+
+                }
+            }
+
         }
+        
+
+
+
+
 
     }
 }

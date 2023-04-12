@@ -13,10 +13,14 @@ public class uwu
 
         //for(int i = 0; i < 10; i++)
         //    fp.AñadirDatos("Nombre Generico"+i, "ISBN Generico" + i, "Autor Generico" + i, "Editor Generico" + i, 123+i);
+        fp.CrearAñadirDatos("UwU", "HDHSGHSHGDGG!1223", "AutorHH", "Editoriales Yae", 245);
+
 
         string Name, ISBN, Autor, Editor;
         int Paginas;
 
-        fp.Search("Nombre Generico");
+        fp.Search("UwU");
+
+        fp.ItemEditor("UwU", "mae", "funcionó", "xd", "uhh", 123);
     }
 }
