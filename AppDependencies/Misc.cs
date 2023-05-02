@@ -19,5 +19,5 @@ namespace AppDependencies
                    "\nPaginas: " + Paginas;
         }
 
-        
+    }
 }

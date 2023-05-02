@@ -23,13 +23,13 @@ namespace AppDependencies
 
             string Structure = Name + "," + ISBN + "," + Autor + "," + Editor + "," + Paginas.ToString();
 
-            if (File.Exists(Global_Name))
+            if (File.Exists(Global_Name + ".csv"))
             {
                 using (FileStream fs = new FileStream(Global_Name + ".csv", FileMode.Append, FileAccess.Write))
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
                     sw.WriteLine(Structure);
-                    
+
                 }
             }
             else
@@ -40,7 +40,7 @@ namespace AppDependencies
                 }
             }
 
-           
+
         }
 
 
@@ -69,13 +69,14 @@ namespace AppDependencies
                 {
                     if (item[0].Trim() == Busqueda | item[1].Trim() == Busqueda | item[2].Trim() == Busqueda | item[3].Trim() == Busqueda | item[4].Trim().ToString() == Busqueda)
                     {
-                        StringProcesing = item[0].Trim() + "," + item[1].Trim() + "," + item[2].Trim() + "," + item[3].Trim() + "," + Convert.ToInt32(item[4].Trim();
-                        Console.WriteLine(Misc.Printer(item[0].Trim(), item[1].Trim(), item[2].Trim(), item[3].Trim(), Convert.ToInt32(item[4].Trim())));
+                        StringProcesing = item[0].Trim() + "," + item[1].Trim() + "," + item[2].Trim() + "," + item[3].Trim() + "," + Convert.ToInt32(item[4].Trim());
+                        //Console.WriteLine(Misc.Printer(item[0].Trim(), item[1].Trim(), item[2].Trim(), item[3].Trim(), Convert.ToInt32(item[4].Trim())));
                         return true;
                     }
                     else
                     {
                         Console.WriteLine("No se encontró el libro que busca. Por favor intente con otro o verifique lo que escribió.");
+                        
                     }
 
                 }
@@ -87,31 +88,37 @@ namespace AppDependencies
 
         public void ItemEditor(string Busqueda, string NewName, string NewISBN, string NewAutor, string NewEditor, int NewPages)
         {
-            string Content;
+            string? ContentHandler;
+            List<string[]> SplitHandler = new List<string[]>();
             if (Search(Busqueda))
             {
-                using (StreamReader sw = File.OpenText(Global_Name+ ".csv"))
+                using (StreamReader sr = File.OpenText(Global_Name + ".csv"))
                 {
-                    Content = sw.ReadToEnd();
-
-                    for(int i = 0; i < 5; i++)
+                    while (!sr.EndOfStream)
                     {
-                        switch (i)
-                        {
-                            case 0:
-                                
-
-                                
-                                break;
-                        }  
+                        ContentHandler = sr.ReadLine();
+                        SplitHandler.Add(ContentHandler.Split(','));
                     }
 
+                    /*Diferenciacion de posiciones.
+                     0 = Nombre del libro
+                     1 = ISBN
+                     2 = Autor
+                     3 = Editor
+                     4 = Numero de Paginas*/
+                }
+
+                foreach(string[] item in SplitHandler)
+                {
+                    /*Agregar switch con las 5 posiciones, 
+                      pedir al usuario que posicion desea buscar.
+                      */
 
                 }
             }
 
         }
-        
+
 
 
 

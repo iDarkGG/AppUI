@@ -13,7 +13,7 @@ public class uwu
 
         //for(int i = 0; i < 10; i++)
         //    fp.AñadirDatos("Nombre Generico"+i, "ISBN Generico" + i, "Autor Generico" + i, "Editor Generico" + i, 123+i);
-        fp.CrearAñadirDatos("UwU", "HDHSGHSHGDGG!1223", "AutorHH", "Editoriales Yae", 245);
+        fp.CrearAñadirDatos("UwU", "HDHSGHSHGsDGG!1223", "AutorHH", "Eddfditoriales Yae", 245);
 
 
         string Name, ISBN, Autor, Editor;
